@@ -84,6 +84,12 @@
         return timer && timer.callAt >= from && timer.callAt <= to;
     }
 
+    function fromNodeTimers() {
+        var lines = new Error().stack.split('\n');
+        for (var i=3, l=lines.length; i<l; i++)
+            return lines[i].match(/\(timers.js:[0-9]+:[0-9]+\)$/);
+    }
+
     function mirrorDateProperties(target, source) {
         var prop;
         for (prop in source) {
@@ -95,6 +101,8 @@
         // set special now implementation
         if (source.now) {
             target.now = function now() {
+                if (fromNodeTimers())
+                    return this.clock._Date.now();
                 return target.clock.now;
             };
         } else {
