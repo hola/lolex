@@ -487,6 +487,10 @@
             }
         };
 
+        clock.firstTimerInRange = function(from, to){
+            return firstTimerInRange(clock, from, to);
+        };
+
         return clock;
     }
     exports.createClock = createClock;
